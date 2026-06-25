@@ -1,0 +1,21 @@
+{
+  "name": "lambdaimg-generated-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "tsc --noEmit -p tsconfig.json",
+    "deploy": "alchemy deploy",
+    "destroy": "alchemy destroy"
+  },
+  "dependencies": {
+    "@lambdaimg/alchemy": "^0.1.0",
+    "alchemy": "2.0.0-beta.58",
+    "effect": "^4.0.0-beta.90"
+  },
+  "devDependencies": {
+    "@effect/platform-bun": "^4.0.0-beta.90",
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.3"
+  }
+}
