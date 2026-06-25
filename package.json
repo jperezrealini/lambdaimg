@@ -18,9 +18,9 @@
     "changeset": "changeset",
     "check": "bun run --filter './packages/*' check",
     "fix": "bun run --filter './packages/*' fix",
-    "release": "bun run --filter './packages/*' build && changeset publish",
+    "release": "bun run build && for dir in packages/*; do (cd \"$dir\" && bun publish || true); done && changeset tag",
     "test": "bun run --filter './packages/*' test",
-    "version": "changeset version"
+    "version": "changeset version && bun update"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.7",

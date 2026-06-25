@@ -61,13 +61,3 @@ bun run build
 bun run check
 bun run test
 ```
-
-## Release
-
-This repo uses Changesets:
-
-```sh
-bun run changeset
-bun run version
-bun run release
-```
