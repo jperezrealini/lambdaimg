@@ -1,5 +1,11 @@
 # lambdaimg
 
+## 0.1.3
+
+### Patch Changes
+
+- 615a4d1: initial release
+
 ## 0.1.1
 
 ### Patch Changes
