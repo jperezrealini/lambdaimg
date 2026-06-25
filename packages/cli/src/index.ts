@@ -1,7 +1,9 @@
 #!/usr/bin/env node
+import { realpathSync } from "node:fs";
 import { mkdir, readdir, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { TEMPLATE_PACKAGE_VERSIONS } from "./template-package.generated.js";
 
 export interface CreateAppOptions {
   cwd?: string;
@@ -123,16 +125,8 @@ function appFiles(packageName: string): Record<string, string> {
           deploy: "alchemy deploy",
           destroy: "alchemy destroy",
         },
-        dependencies: {
-          "@lambdaimg/alchemy": "^0.1.0",
-          alchemy: "2.0.0-beta.58",
-          effect: "^4.0.0-beta.90",
-        },
-        devDependencies: {
-          "@effect/platform-bun": "^4.0.0-beta.90",
-          "@types/node": "^24.0.0",
-          typescript: "^5.9.3",
-        },
+        dependencies: TEMPLATE_PACKAGE_VERSIONS.dependencies,
+        devDependencies: TEMPLATE_PACKAGE_VERSIONS.devDependencies,
       },
       null,
       2,
@@ -246,7 +240,11 @@ function isCliEntrypoint(): boolean {
   if (!argvPath) {
     return false;
   }
-  return path.resolve(argvPath) === fileURLToPath(import.meta.url);
+  try {
+    return realpathSync(path.resolve(argvPath)) === realpathSync(fileURLToPath(import.meta.url));
+  } catch {
+    return false;
+  }
 }
 
 if (isCliEntrypoint()) {
