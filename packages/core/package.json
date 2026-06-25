@@ -1,6 +1,6 @@
 {
   "name": "@lambdaimg/core",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "description": "Core URL and srcset primitives for LambdaImg.",
   "license": "MIT",
   "repository": {
