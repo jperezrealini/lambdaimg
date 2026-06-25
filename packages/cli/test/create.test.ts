@@ -1,7 +1,7 @@
+import { describe, expect, test } from "bun:test";
 import { mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { describe, expect, test } from "bun:test";
 import { createApp } from "../src/index.js";
 
 async function tempRoot(): Promise<string> {
@@ -35,7 +35,7 @@ describe("createApp", () => {
     await createApp("existing", { cwd });
     await writeFile(path.join(targetDir, "extra.txt"), "already here");
 
-    await expect(createApp("existing", { cwd })).rejects.toThrow(/not empty/);
+    expect(createApp("existing", { cwd })).rejects.toThrow(/not empty/);
   });
 
   test("writes into a non-empty directory with force", async () => {
@@ -44,7 +44,7 @@ describe("createApp", () => {
     await createApp("existing", { cwd });
     await writeFile(path.join(targetDir, "extra.txt"), "already here");
 
-    await expect(createApp("existing", { cwd, force: true })).resolves.toEqual(
+    expect(createApp("existing", { cwd, force: true })).resolves.toEqual(
       expect.objectContaining({ targetDir }),
     );
   });

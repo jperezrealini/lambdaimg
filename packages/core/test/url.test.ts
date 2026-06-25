@@ -27,12 +27,8 @@ describe("width validation", () => {
 
 describe("normalization", () => {
   test("normalizes leading slashes and trailing base URL slashes", () => {
-    expect(normalizeImageKey("/some/path/dog.jpeg")).toBe(
-      "some/path/dog.jpeg",
-    );
-    expect(normalizeBaseUrl("https://images.example.com///")).toBe(
-      "https://images.example.com",
-    );
+    expect(normalizeImageKey("/some/path/dog.jpeg")).toBe("some/path/dog.jpeg");
+    expect(normalizeBaseUrl("https://images.example.com///")).toBe("https://images.example.com");
   });
 });
 
@@ -52,9 +48,7 @@ describe("buildOriginalUrl", () => {
 
 describe("buildResizedUrl", () => {
   test("builds the canonical resized path", () => {
-    expect(buildResizedUrl("some/path/dog.jpeg", 640)).toBe(
-      "/_/w640/some/path/dog.jpeg/dog.webp",
-    );
+    expect(buildResizedUrl("some/path/dog.jpeg", 640)).toBe("/_/w640/some/path/dog.jpeg/dog.webp");
   });
 
   test("prepends a normalized base URL", () => {
@@ -95,9 +89,7 @@ describe("parseResizedPath", () => {
   });
 
   test("rejects non-canonical filenames", () => {
-    expect(
-      parseResizedPath("/_/w640/some/path/dog.jpeg/not-dog.webp"),
-    ).toBeNull();
+    expect(parseResizedPath("/_/w640/some/path/dog.jpeg/not-dog.webp")).toBeNull();
   });
 
   test("rejects derived originals", () => {

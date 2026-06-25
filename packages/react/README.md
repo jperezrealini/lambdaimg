@@ -24,5 +24,5 @@ Use `priority` for above-the-fold images:
   width={1440}
   height={810}
   alt="Showroom"
-/>;
+/>
 ```

@@ -121,9 +121,7 @@ export default class ImagesResize extends AWS.Lambda.Function<ImagesResize>()(
         });
       }).pipe(
         Effect.catchCause(() =>
-          Effect.succeed(
-            HttpServerResponse.text("Internal Server Error", { status: 500 }),
-          ),
+          Effect.succeed(HttpServerResponse.text("Internal Server Error", { status: 500 })),
         ),
       ),
     };

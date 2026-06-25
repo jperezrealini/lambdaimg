@@ -1,6 +1,4 @@
-export const ALLOWED_IMAGE_WIDTHS = [
-  160, 320, 480, 640, 828, 1080, 1440, 1920,
-] as const;
+export const ALLOWED_IMAGE_WIDTHS = [160, 320, 480, 640, 828, 1080, 1440, 1920] as const;
 
 export type ImageWidth = (typeof ALLOWED_IMAGE_WIDTHS)[number];
 

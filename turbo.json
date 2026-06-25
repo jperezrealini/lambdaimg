@@ -9,11 +9,11 @@
       "dependsOn": ["^build"],
       "outputs": []
     },
-    "test": {
+    "fix": {
       "dependsOn": ["^build"],
       "outputs": []
     },
-    "lint": {
+    "test": {
       "dependsOn": ["^build"],
       "outputs": []
     }

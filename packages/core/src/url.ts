@@ -1,8 +1,4 @@
-import {
-  ALLOWED_IMAGE_WIDTHS,
-  DERIVED_PREFIX,
-  type ImageWidth,
-} from "./constants.js";
+import { ALLOWED_IMAGE_WIDTHS, DERIVED_PREFIX, type ImageWidth } from "./constants.js";
 
 export interface ParsedResizedPath {
   width: ImageWidth;
@@ -41,10 +37,7 @@ export function normalizeBaseUrl(baseUrl = ""): string {
   return baseUrl.replace(/\/+$/, "");
 }
 
-export function buildOriginalUrl(
-  s3Key: string,
-  options: BuildImageUrlOptions = {},
-): string {
+export function buildOriginalUrl(s3Key: string, options: BuildImageUrlOptions = {}): string {
   return withBaseUrl(options.baseUrl, `/${normalizeImageKey(s3Key)}`);
 }
 
@@ -55,20 +48,12 @@ export function buildResizedUrl(
 ): string {
   const normalizedKey = normalizeImageKey(s3Key);
   const filename = canonicalFilename(normalizedKey);
-  return withBaseUrl(
-    options.baseUrl,
-    `/_/${`w${width}`}/${normalizedKey}/${filename}.webp`,
-  );
+  return withBaseUrl(options.baseUrl, `/_/${`w${width}`}/${normalizedKey}/${filename}.webp`);
 }
 
-export function buildSrcSet(
-  s3Key: string,
-  options: BuildSrcSetOptions = {},
-): string {
+export function buildSrcSet(s3Key: string, options: BuildSrcSetOptions = {}): string {
   const widths = options.widths ?? ALLOWED_IMAGE_WIDTHS;
-  return widths
-    .map((width) => `${buildResizedUrl(s3Key, width, options)} ${width}w`)
-    .join(", ");
+  return widths.map((width) => `${buildResizedUrl(s3Key, width, options)} ${width}w`).join(", ");
 }
 
 export function resizedS3Key(s3Key: string, width: ImageWidth): string {

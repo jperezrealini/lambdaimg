@@ -41,13 +41,10 @@ export const ImagesStack = (id: string, props: ImagesStackProps) =>
       originType: "s3",
       description: "Images bucket origin access control",
     });
-    const lambdaOac = yield* AWS.CloudFront.OriginAccessControl(
-      `${id}LambdaOac`,
-      {
-        originType: "lambda",
-        description: "Images resize Lambda function URL origin access control",
-      },
-    );
+    const lambdaOac = yield* AWS.CloudFront.OriginAccessControl(`${id}LambdaOac`, {
+      originType: "lambda",
+      description: "Images resize Lambda function URL origin access control",
+    });
     const resize = yield* ImagesResize;
 
     const certificate = yield* AWS.ACM.Certificate(`${id}Cert`, {
@@ -55,22 +52,19 @@ export const ImagesStack = (id: string, props: ImagesStackProps) =>
       hostedZoneId: props.hostedZoneId,
     });
 
-    const longTtlCachePolicy = yield* AWS.CloudFront.CachePolicy(
-      `${id}LongTtlCache`,
-      {
-        name: `${id}-long-ttl`,
-        minTTL: 31536000,
-        defaultTTL: 31536000,
-        maxTTL: 31536000,
-        parametersInCacheKeyAndForwardedToOrigin: {
-          CookiesConfig: { CookieBehavior: "none" },
-          HeadersConfig: { HeaderBehavior: "none" },
-          QueryStringsConfig: { QueryStringBehavior: "none" },
-          EnableAcceptEncodingGzip: true,
-          EnableAcceptEncodingBrotli: true,
-        },
+    const longTtlCachePolicy = yield* AWS.CloudFront.CachePolicy(`${id}LongTtlCache`, {
+      name: `${id}-long-ttl`,
+      minTTL: 31536000,
+      defaultTTL: 31536000,
+      maxTTL: 31536000,
+      parametersInCacheKeyAndForwardedToOrigin: {
+        CookiesConfig: { CookieBehavior: "none" },
+        HeadersConfig: { HeaderBehavior: "none" },
+        QueryStringsConfig: { QueryStringBehavior: "none" },
+        EnableAcceptEncodingGzip: true,
+        EnableAcceptEncodingBrotli: true,
       },
-    );
+    });
 
     const lambdaOriginDomain = Output.map(resize.functionUrl, (functionUrl) => {
       if (!functionUrl) {

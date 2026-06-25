@@ -89,9 +89,7 @@ function parseArgs(argv: string[]): {
   };
 }
 
-async function getPathStatus(
-  targetPath: string,
-): Promise<"directory" | "file" | "missing"> {
+async function getPathStatus(targetPath: string): Promise<"directory" | "file" | "missing"> {
   try {
     const stats = await stat(targetPath);
     return stats.isDirectory() ? "directory" : "file";

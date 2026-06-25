@@ -6,11 +6,10 @@ import {
 } from "@lambdaimg/core";
 import type * as React from "react";
 
-export interface ImageProps
-  extends Omit<
-    React.ImgHTMLAttributes<HTMLImageElement>,
-    "alt" | "src" | "srcSet" | "sizes" | "loading" | "decoding"
-  > {
+export interface ImageProps extends Omit<
+  React.ImgHTMLAttributes<HTMLImageElement>,
+  "alt" | "src" | "srcSet" | "sizes" | "loading" | "decoding"
+> {
   alt: string;
   src: string;
   baseUrl?: string;
