@@ -1,0 +1,39 @@
+{
+  "name": "lambdaimg",
+  "version": "0.2.0",
+  "description": "CLI for creating LambdaImg deployable apps.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jperezrealini/lambdaimg.git",
+    "directory": "packages/cli"
+  },
+  "bin": {
+    "lambdaimg": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "bun run scripts/generate-template-package.ts && tsc -p tsconfig.build.json",
+    "check": "oxlint && oxfmt --check && tsc --noEmit -p tsconfig.json",
+    "fix": "oxlint --fix && oxfmt",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:"
+  }
+}
