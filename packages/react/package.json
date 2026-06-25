@@ -1,0 +1,48 @@
+{
+  "name": "@lambdaimg/react",
+  "version": "0.1.2",
+  "description": "React image component for LambdaImg.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jperezrealini/lambdaimg.git",
+    "directory": "packages/react"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "check": "oxlint && oxfmt --check && tsc --noEmit -p tsconfig.json",
+    "fix": "oxlint --fix && oxfmt",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@lambdaimg/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0"
+  }
+}
