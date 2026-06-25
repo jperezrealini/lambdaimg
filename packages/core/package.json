@@ -1,0 +1,37 @@
+{
+  "name": "@lambdaimg/core",
+  "version": "0.1.0",
+  "description": "Core URL and srcset primitives for LambdaImg.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jperezrealini/lambdaimg.git",
+    "directory": "packages/core"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "check": "oxlint && oxfmt --check && tsc --noEmit -p tsconfig.json",
+    "fix": "oxlint --fix && oxfmt",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:"
+  }
+}
