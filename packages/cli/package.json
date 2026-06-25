@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "description": "CLI for creating LambdaImg deployable apps.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jperezrealini/lambdaimg.git",
+    "directory": "packages/cli"
+  },
   "bin": {
     "lambdaimg": "./dist/index.js"
   },
@@ -13,9 +18,12 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     }
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
