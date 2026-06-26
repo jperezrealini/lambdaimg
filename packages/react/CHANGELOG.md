@@ -1,5 +1,17 @@
 # @lambdaimg/react
 
+## 0.1.3
+
+### Patch Changes
+
+- f17f71b: initial release
+- f17f71b: initial release
+- f17f71b: initial release
+- Updated dependencies [f17f71b]
+- Updated dependencies [f17f71b]
+- Updated dependencies [f17f71b]
+  - @lambdaimg/core@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes
