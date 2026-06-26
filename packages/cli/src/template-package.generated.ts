@@ -7,6 +7,7 @@ export const TEMPLATE_PACKAGE_VERSIONS = {
   },
   devDependencies: {
     "@effect/platform-bun": "^4.0.0-beta.90",
+    "@effect/platform-node": "^4.0.0-beta.90",
     "@types/node": "^26.0.1",
     typescript: "^5.9.3",
   },

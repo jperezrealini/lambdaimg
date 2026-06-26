@@ -55,6 +55,13 @@ const templatePackageVersions = {
       ),
       effectVersion,
     ),
+    "@effect/platform-node": applyRangePrefix(
+      required(
+        generatedAppPackage.devDependencies?.["@effect/platform-node"],
+        "examples/generated-app/package.json devDependency @effect/platform-node",
+      ),
+      effectVersion,
+    ),
     "@types/node": required(
       rootPackage.workspaces?.catalog?.["@types/node"],
       "root catalog @types/node",

@@ -123,6 +123,10 @@ describe("createApp", () => {
           required(generatedAppPackage.devDependencies?.["@effect/platform-bun"]),
           effectVersion,
         ),
+        "@effect/platform-node": applyRangePrefix(
+          required(generatedAppPackage.devDependencies?.["@effect/platform-node"]),
+          effectVersion,
+        ),
         "@types/node": required(rootPackage.workspaces?.catalog?.["@types/node"]),
         typescript: required(generatedAppPackage.devDependencies?.typescript),
       },
