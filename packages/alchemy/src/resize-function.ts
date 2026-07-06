@@ -38,6 +38,9 @@ export default class ImagesResize extends AWS.Lambda.Function<ImagesResize>()(
     memorySize: 2048,
     build: {
       install: ["sharp", "heic-convert"],
+      output: {
+        dir: ".alchemy/bundles/images-resize",
+      },
     },
   },
   Effect.gen(function* () {
