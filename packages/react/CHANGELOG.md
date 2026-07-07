@@ -1,5 +1,11 @@
 # @lambdaimg/react
 
+## 0.3.0
+
+### Patch Changes
+
+- @lambdaimg/core@0.3.0
+
 ## 0.2.2
 
 ### Patch Changes

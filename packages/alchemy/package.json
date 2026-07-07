@@ -1,6 +1,6 @@
 {
   "name": "@lambdaimg/alchemy",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "AWS Alchemy stack and Lambda runtime for LambdaImg.",
   "license": "MIT",
   "repository": {
