@@ -1,6 +1,6 @@
 {
   "name": "@lambdaimg/react",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "React image component for LambdaImg.",
   "license": "MIT",
   "repository": {
