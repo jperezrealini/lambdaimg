@@ -28,7 +28,9 @@
     "build": "tsc -p tsconfig.build.json",
     "check": "oxlint && oxfmt --check && tsc --noEmit -p tsconfig.json",
     "fix": "oxlint --fix && oxfmt",
-    "test": "bun test"
+    "test": "bun test",
+    "test:e2e": "RUN_AWS_E2E=1 bun test test/e2e.test.ts",
+    "test:e2e:destroy": "alchemy destroy test/fixtures/e2e-stack.ts --stage \"${ALCHEMY_STAGE:-test}\" --yes"
   },
   "dependencies": {
     "@lambdaimg/core": "workspace:*",
@@ -38,6 +40,8 @@
     "sharp": "^0.34.5"
   },
   "devDependencies": {
+    "@distilled.cloud/aws": "0.26.1",
+    "@effect/platform-node": "4.0.0-beta.90",
     "@types/bun": "catalog:",
     "@types/node": "catalog:"
   }

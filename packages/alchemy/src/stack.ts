@@ -28,12 +28,16 @@ const CLOUDFRONT_BEHAVIOR_DEFAULTS = {
   }[],
 };
 
-export interface ImagesStackProps {
-  domain: string;
-  hostedZoneId: string;
-}
+export type ImagesStackProps =
+  | {
+      /** Public hostname for the image CDN (e.g. images.example.com). Requires hostedZoneId. */
+      domain: string;
+      /** Existing Route53 zone containing (or that will contain) `domain`. */
+      hostedZoneId: string;
+    }
+  | { domain?: undefined; hostedZoneId?: undefined };
 
-export const ImagesStack = (id: string, props: ImagesStackProps) =>
+export const ImagesStack = (id: string, props: ImagesStackProps = {}) =>
   Effect.gen(function* () {
     const bucket = yield* imagesBucket;
     const { accountId } = yield* AWS.AWSEnvironment.current;
@@ -47,13 +51,16 @@ export const ImagesStack = (id: string, props: ImagesStackProps) =>
     });
     const resize = yield* ImagesResize;
 
-    const certificate = yield* AWS.ACM.Certificate(`${id}Cert`, {
-      domainName: props.domain,
-      hostedZoneId: props.hostedZoneId,
-    });
+    const customDomain = props.domain !== undefined;
+
+    const certificate = customDomain
+      ? yield* AWS.ACM.Certificate(`${id}Cert`, {
+          domainName: props.domain,
+          hostedZoneId: props.hostedZoneId,
+        })
+      : undefined;
 
     const longTtlCachePolicy = yield* AWS.CloudFront.CachePolicy(`${id}LongTtlCache`, {
-      name: `${id}-long-ttl`,
       minTTL: 31536000,
       defaultTTL: 31536000,
       maxTTL: 31536000,
@@ -74,7 +81,7 @@ export const ImagesStack = (id: string, props: ImagesStackProps) =>
     });
 
     const distribution = yield* AWS.CloudFront.Distribution(`${id}Cdn`, {
-      aliases: [props.domain],
+      aliases: customDomain ? [props.domain] : [],
       priceClass: "PriceClass_All",
       httpVersion: "http2and3",
       logging: { enabled: false },
@@ -128,11 +135,20 @@ export const ImagesStack = (id: string, props: ImagesStackProps) =>
         cachePolicyId: longTtlCachePolicy.cachePolicyId,
       })),
       customErrorResponses: [],
-      viewerCertificate: {
-        acmCertificateArn: certificate.certificateArn,
-        sslSupportMethod: "sni-only",
-        minimumProtocolVersion: "TLSv1.2_2021",
-      },
+      ...(customDomain && certificate
+        ? {
+            viewerCertificate: {
+              acmCertificateArn: certificate.certificateArn,
+              sslSupportMethod: "sni-only" as const,
+              minimumProtocolVersion: "TLSv1.2_2021" as const,
+            },
+          }
+        : {
+            viewerCertificate: {
+              cloudFrontDefaultCertificate: true,
+              minimumProtocolVersion: "TLSv1.2_2021" as const,
+            },
+          }),
     });
 
     yield* AWS.Lambda.Permission(`${id}ResizeCloudFront`, {
@@ -170,19 +186,26 @@ export const ImagesStack = (id: string, props: ImagesStackProps) =>
       ],
     });
 
-    yield* AWS.Route53.Record(`${id}Alias`, {
-      hostedZoneId: props.hostedZoneId,
-      name: props.domain,
-      type: "A",
-      aliasTarget: {
-        hostedZoneId: distribution.hostedZoneId,
-        dnsName: distribution.domainName,
-      },
-    });
+    if (customDomain) {
+      yield* AWS.Route53.Record(`${id}Alias`, {
+        hostedZoneId: props.hostedZoneId,
+        name: props.domain,
+        type: "A",
+        aliasTarget: {
+          hostedZoneId: distribution.hostedZoneId,
+          dnsName: distribution.domainName,
+        },
+      });
+    }
 
     return {
-      domain: props.domain,
-      url: Output.interpolate`https://${props.domain}`,
+      domain: customDomain ? props.domain : distribution.domainName,
+      url: customDomain
+        ? Output.interpolate`https://${props.domain}`
+        : Output.map(
+            distribution.domainName,
+            (distributionDomain) => `https://${distributionDomain}`,
+          ),
       distributionDomain: distribution.domainName,
       resizeFunctionUrl: resize.functionUrl,
       bucketName: bucket.bucketName,

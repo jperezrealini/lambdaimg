@@ -19,13 +19,15 @@ cd my-images
 bun install
 ```
 
-Edit `alchemy.run.ts` with your image domain and Route53 hosted zone ids, then configure AWS credentials for Alchemy:
+Configure AWS credentials for Alchemy, then deploy:
 
 ```sh
 cp .env.example .env
 # edit AWS_PROFILE and AWS_REGION
 bun run deploy
 ```
+
+The stack serves images at your CloudFront distribution URL (shown in the deploy output). Use that URL as `baseUrl` in your app.
 
 Upload original images to the generated S3 bucket. The original object key becomes the image `src`:
 
@@ -35,7 +37,7 @@ import { Image } from "@lambdaimg/react";
 export function ProductPhoto() {
   return (
     <Image
-      baseUrl="https://images.example.com"
+      baseUrl="https://d111111abcdef8.cloudfront.net"
       src="products/chair.jpeg"
       width={640}
       height={480}
@@ -52,6 +54,22 @@ LambdaImg generates derivative URLs like:
 ```
 
 The first request generates and stores the WebP derivative in S3. CloudFront and S3 serve later requests from cache.
+
+### Custom domain (optional)
+
+To serve images on your own hostname, pass **both** `domain` and `hostedZoneId` to `ImagesStack` in `alchemy.run.ts`:
+
+```ts
+return (
+  yield *
+  ImagesStack("Images", {
+    domain: "images.example.com",
+    hostedZoneId: "Z0000000000000",
+  })
+);
+```
+
+A bare CNAME to the CloudFront domain is not enough — CloudFront needs a matching alias and TLS certificate, which the stack provisions when both props are set.
 
 ## Development
 

@@ -20,6 +20,8 @@
     "fix": "bun run --filter './packages/*' fix",
     "release": "bun run build && for dir in packages/*; do (cd \"$dir\" && bun publish --tolerate-republish); done && changeset tag",
     "test": "bun run --filter './packages/*' test",
+    "test:e2e": "bun run --filter '@lambdaimg/alchemy' test:e2e",
+    "test:e2e:destroy": "bun run --filter '@lambdaimg/alchemy' test:e2e:destroy",
     "version": "changeset version && bun update"
   },
   "devDependencies": {

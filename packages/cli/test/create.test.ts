@@ -43,7 +43,7 @@ describe("createApp", () => {
     const stack = await readFile(path.join(targetDir, "alchemy.run.ts"), "utf8");
     expect(stack).toContain('import { ImagesStack } from "@lambdaimg/alchemy";');
     expect(stack).toContain("AWS.providers()");
-    expect(stack).toContain('ImagesStack("Images", config)');
+    expect(stack).toContain('ImagesStack("Images", {})');
   });
 
   test("refuses a non-empty directory without force", async () => {

@@ -6,7 +6,7 @@ export const imagesBucket = Effect.gen(function* () {
   const stack = yield* Stack;
 
   return yield* S3.Bucket("ImagesBucket", {
-    forceDestroy: stack.stage === "dev",
+    forceDestroy: stack.stage === "dev" || stack.stage === "test",
     publicAccessBlock: {
       blockPublicAcls: true,
       ignorePublicAcls: true,
