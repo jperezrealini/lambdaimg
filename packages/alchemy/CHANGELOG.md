@@ -1,5 +1,13 @@
 # @lambdaimg/alchemy
 
+## 0.4.0
+
+### Patch Changes
+
+- Updated dependencies [109689e]
+- Updated dependencies [109689e]
+  - @lambdaimg/core@0.4.0
+
 ## 0.3.0
 
 ### Minor Changes
