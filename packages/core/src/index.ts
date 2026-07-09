@@ -16,7 +16,10 @@ export {
   normalizeImageKey,
   parseResizedPath,
   resizedS3Key,
+  resolveImageSrc,
   type BuildImageUrlOptions,
+  type BuildOriginalUrlOptions,
   type BuildSrcSetOptions,
   type ParsedResizedPath,
+  type ResolvedImageSrc,
 } from "./url.js";

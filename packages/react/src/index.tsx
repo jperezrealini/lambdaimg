@@ -2,6 +2,7 @@ import {
   ALLOWED_IMAGE_WIDTHS,
   buildOriginalUrl,
   buildSrcSet,
+  resolveImageSrc,
   type ImageWidth,
 } from "@lambdaimg/core";
 import type * as React from "react";
@@ -11,8 +12,8 @@ export interface ImageProps extends Omit<
   "alt" | "src" | "srcSet" | "sizes" | "loading" | "decoding"
 > {
   alt: string;
+  /** Full image URL (or object key path) for the original in S3. */
   src: string;
-  baseUrl?: string;
   widths?: readonly ImageWidth[];
   sizes?: string;
   priority?: boolean;
@@ -23,7 +24,6 @@ export interface ImageProps extends Omit<
 export function Image({
   alt,
   src,
-  baseUrl,
   widths = ALLOWED_IMAGE_WIDTHS,
   sizes = "100vw",
   priority = false,
@@ -31,6 +31,7 @@ export function Image({
   decoding = "async",
   ...props
 }: ImageProps) {
+  const { baseUrl, key, search, hash } = resolveImageSrc(src);
   const resolvedLoading = loading ?? (priority ? "eager" : "lazy");
   const fetchPriority = priority ? "high" : props.fetchPriority;
 
@@ -38,8 +39,8 @@ export function Image({
     <img
       {...props}
       alt={alt}
-      src={buildOriginalUrl(src, { baseUrl })}
-      srcSet={buildSrcSet(src, { baseUrl, widths })}
+      src={buildOriginalUrl(key, { baseUrl, search, hash })}
+      srcSet={buildSrcSet(key, { baseUrl, widths })}
       sizes={sizes}
       loading={resolvedLoading}
       decoding={decoding}

@@ -8,6 +8,7 @@ import {
   normalizeBaseUrl,
   normalizeImageKey,
   parseResizedPath,
+  resolveImageSrc,
 } from "../src/index.js";
 
 describe("canonicalFilename", () => {
@@ -32,6 +33,40 @@ describe("normalization", () => {
   });
 });
 
+describe("resolveImageSrc", () => {
+  test("keeps relative keys as-is", () => {
+    expect(resolveImageSrc("some/path/dog.jpeg")).toEqual({ key: "some/path/dog.jpeg" });
+    expect(resolveImageSrc("/some/path/dog.jpeg")).toEqual({ key: "/some/path/dog.jpeg" });
+  });
+
+  test("splits absolute URLs into origin and pathname", () => {
+    expect(resolveImageSrc("https://images.example.com/some/path/dog.jpeg")).toEqual({
+      baseUrl: "https://images.example.com",
+      key: "/some/path/dog.jpeg",
+    });
+  });
+
+  test("treats protocol-relative URLs as absolute", () => {
+    expect(resolveImageSrc("//images.example.com/some/path/dog.jpeg")).toEqual({
+      baseUrl: "//images.example.com",
+      key: "/some/path/dog.jpeg",
+    });
+  });
+
+  test("preserves search and hash from absolute URLs", () => {
+    expect(
+      resolveImageSrc(
+        "https://images.example.com/some/path/dog.jpeg?v=20260709&Signature=abc#section",
+      ),
+    ).toEqual({
+      baseUrl: "https://images.example.com",
+      key: "/some/path/dog.jpeg",
+      search: "?v=20260709&Signature=abc",
+      hash: "#section",
+    });
+  });
+});
+
 describe("buildOriginalUrl", () => {
   test("maps the s3 key to a root path", () => {
     expect(buildOriginalUrl("some/path/dog.jpeg")).toBe("/some/path/dog.jpeg");
@@ -43,6 +78,24 @@ describe("buildOriginalUrl", () => {
         baseUrl: "https://images.example.com/",
       }),
     ).toBe("https://images.example.com/some/path/dog.jpeg");
+  });
+
+  test("appends search and hash to the original URL only", () => {
+    expect(
+      buildOriginalUrl("/some/path/dog.jpeg", {
+        baseUrl: "https://images.example.com",
+        search: "?v=1",
+        hash: "#top",
+      }),
+    ).toBe("https://images.example.com/some/path/dog.jpeg?v=1#top");
+  });
+
+  test("keeps protocol-relative base URLs", () => {
+    expect(
+      buildOriginalUrl("/some/path/dog.jpeg", {
+        baseUrl: "//images.example.com",
+      }),
+    ).toBe("//images.example.com/some/path/dog.jpeg");
   });
 });
 

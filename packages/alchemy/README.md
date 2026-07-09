@@ -20,7 +20,7 @@ export default Alchemy.Stack(
 );
 ```
 
-Deploy output includes a CloudFront URL to use as `baseUrl`. For a custom domain, pass both `domain` and `hostedZoneId`:
+Deploy output includes a CloudFront URL to use as the host in image `src` URLs. For a custom domain, pass both `domain` and `hostedZoneId`:
 
 ```ts
 return (

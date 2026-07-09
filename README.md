@@ -27,9 +27,7 @@ cp .env.example .env
 bun run deploy
 ```
 
-The stack serves images at your CloudFront distribution URL (shown in the deploy output). Use that URL as `baseUrl` in your app.
-
-Upload original images to the generated S3 bucket. The original object key becomes the image `src`:
+The stack serves images at your CloudFront distribution URL (shown in the deploy output). Upload original images to the generated S3 bucket, then pass the full original URL as `src`:
 
 ```tsx
 import { Image } from "@lambdaimg/react";
@@ -37,8 +35,7 @@ import { Image } from "@lambdaimg/react";
 export function ProductPhoto() {
   return (
     <Image
-      baseUrl="https://d111111abcdef8.cloudfront.net"
-      src="products/chair.jpeg"
+      src="https://d111111abcdef8.cloudfront.net/products/chair.jpeg"
       width={640}
       height={480}
       alt="Walnut chair"

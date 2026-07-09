@@ -10,11 +10,28 @@ export interface BuildImageUrlOptions {
   baseUrl?: string;
 }
 
+export interface BuildOriginalUrlOptions extends BuildImageUrlOptions {
+  /** Includes the leading `?` when present. */
+  search?: string;
+  /** Includes the leading `#` when present. */
+  hash?: string;
+}
+
 export interface BuildSrcSetOptions extends BuildImageUrlOptions {
   widths?: readonly ImageWidth[];
 }
 
+export interface ResolvedImageSrc {
+  baseUrl?: string;
+  key: string;
+  /** Includes the leading `?` when present. */
+  search?: string;
+  /** Includes the leading `#` when present. */
+  hash?: string;
+}
+
 const RESIZED_PATH_RE = /^\/_\/w(\d+)\/(.+)\.webp$/;
+const ABSOLUTE_URL_RE = /^https?:\/\//i;
 
 export function canonicalFilename(s3Key: string): string {
   const lastSegment = s3Key.split("/").pop() ?? s3Key;
@@ -37,8 +54,32 @@ export function normalizeBaseUrl(baseUrl = ""): string {
   return baseUrl.replace(/\/+$/, "");
 }
 
-export function buildOriginalUrl(s3Key: string, options: BuildImageUrlOptions = {}): string {
-  return withBaseUrl(options.baseUrl, `/${normalizeImageKey(s3Key)}`);
+/** Split a full image URL or object key into `{ baseUrl, key }` for URL builders. */
+export function resolveImageSrc(src: string): ResolvedImageSrc {
+  if (src.startsWith("//")) {
+    const url = new URL(`https:${src}`);
+    return {
+      baseUrl: `//${url.host}`,
+      key: url.pathname,
+      ...urlExtras(url),
+    };
+  }
+
+  if (!ABSOLUTE_URL_RE.test(src)) {
+    return { key: src };
+  }
+
+  const url = new URL(src);
+  return {
+    baseUrl: url.origin,
+    key: url.pathname,
+    ...urlExtras(url),
+  };
+}
+
+export function buildOriginalUrl(s3Key: string, options: BuildOriginalUrlOptions = {}): string {
+  const path = withBaseUrl(options.baseUrl, `/${normalizeImageKey(s3Key)}`);
+  return `${path}${options.search ?? ""}${options.hash ?? ""}`;
 }
 
 export function buildResizedUrl(
@@ -105,4 +146,11 @@ function withBaseUrl(baseUrl: string | undefined, pathname: string): string {
     return pathname;
   }
   return `${normalizedBaseUrl}${pathname}`;
+}
+
+function urlExtras(url: URL): Pick<ResolvedImageSrc, "search" | "hash"> {
+  return {
+    ...(url.search ? { search: url.search } : {}),
+    ...(url.hash ? { hash: url.hash } : {}),
+  };
 }
